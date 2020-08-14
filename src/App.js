@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';//added bootstrap
 //added below for the ToDoBanner.js reference
 import { ToDoBanner } from './ToDoBanner';
 import { ToDoRow } from './ToDoRow';
+import { ToDoCreator } from './ToDoCreator';
 // function App() {
 //   return (
 //     <div className="App">
@@ -57,7 +58,7 @@ export default class App extends Component {
   //Feature -3 todoTableRows Function
   //  If the ToDoRow Component's "done" property experiences a change event (checking the Done box in the UI) 
   //then the ToDoRow component calls a Callback method called toggleTodo (below) and passes toggleTodo the checked todo item
-  todoTableRows = (isTaskDone) => this.state.todoItems.filter(x => x.done == isTaskDone).map(notCompleted =>
+  todoTableRows = (isTaskDone) => this.state.todoItems.filter(x => x.done === isTaskDone).map(notCompleted =>
     <ToDoRow
       key={notCompleted.action}
       item={notCompleted}
@@ -80,7 +81,40 @@ export default class App extends Component {
     }
   );
 
+
+  //feature 5E
+  //method below is the callback for the ToDoCreator component
+  createNewTodoCallback = (newTask) => {
+    if (!this.state.todoItems.find(
+      x => x.action === this.state.newItemText)) {
+      this.setState({
+        todoItems: [...this.state.todoItems, { action: newTask, done: false }]
+      }, () => localStorage.setItem("todos", JSON.stringify(this.state)) //end of setItem
+      ); //End of setstate
+    }
+  }
+
+
   //using the lambda syntax the return keyword is not needed, when using Lambda sytax need a div
+
+  //Feature - 5A
+  //  the method below is a built in react method to handle logic for when the app "mounts" or "loads"
+
+  componentDidMount = () => {
+    let data = localStorage.getItem("todos");
+    this.setState(
+      data != null ? JSON.parse(data) : {
+        userName: "Billy Bob",
+        todoItems: [
+          { action: "Go Fishing", done: false },
+          { action: "Go Hunting", done: false },
+          { action: "Go Camping", done: false }
+        ]
+      }
+    )
+  };
+
+
   render = () =>
     <div>
       {/*Features 1&2*/}
@@ -88,6 +122,11 @@ export default class App extends Component {
       <ToDoBanner
         displayName={this.state.userName}
         tasks={this.state.todoItems}
+      />
+
+      {/*Feature 5B*/}
+      <ToDoCreator
+        callback={this.createNewTodoCallback}
       />
 
       {/* Feature - 3 */}
