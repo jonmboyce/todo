@@ -3,6 +3,9 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';//added bootstrap
+//added below for the ToDoBanner.js reference
+import {ToDoBanner} from './ToDoBanner';
+import {ToDoRow} from './ToDoRow';
 // function App() {
 //   return (
 //     <div className="App">
@@ -25,13 +28,7 @@ import 'bootstrap/dist/css/bootstrap.css';//added bootstrap
 // }
 
   //define the todo banner
-  export class ToDoBanner extends Component {
-    render = () =>
-      <h4 className="bg-primary text-white text-center p-2">
-        {this.props.displayName}'s To Do List ({this.props.tasks.filter(
-          x => !x.done).length} items still to do.)
-      </h4>
-  };
+
 
 export default class App extends Component {
   //Above we have created a class called "App" that extends the functionality of the Component class
@@ -58,6 +55,18 @@ export default class App extends Component {
   }//End ctor
 
 
+
+//Feature -3 todoTableRows Function
+//  If the ToDoRow Component's "done" property experiences a change event (checking the Done box in the UI) 
+//then the ToDoRow component calls a Callback method called toggleTodo (below) and passes toggleTodo the checked todo item
+todoTableRows = (isTaskDone) => this.state.todoItems.filter(x => x.done == isTaskDone).map( notCompleted => 
+  <ToDoRow 
+  key = {notCompleted.action}
+  item = {notCompleted}
+  />
+  )
+
+
 //using the lambda syntax the return keyword is not needed, when using Lambda sytax need a div
 render = () =>
   <div>
@@ -67,6 +76,19 @@ render = () =>
       displayName={this.state.userName}
       tasks={this.state.todoItems}
     />
+
+{/* Feature - 3 */}
+<table className="table table-stripes table-bordered">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Done</th>
+    </tr>
+  </thead>
+  <tbody>
+    {this.todoTableRows(false)}
+  </tbody>
+</table>
   </div>
 };
 
