@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';//added bootstrap
 import { ToDoBanner } from './ToDoBanner';
 import { ToDoRow } from './ToDoRow';
 import { ToDoCreator } from './ToDoCreator';
+import {VisibilityControl} from './VisibilityControl';
 // function App() {
 //   return (
 //     <div className="App">
@@ -94,7 +95,6 @@ export default class App extends Component {
     }
   }
 
-
   //using the lambda syntax the return keyword is not needed, when using Lambda sytax need a div
 
   //Feature - 5A
@@ -109,11 +109,11 @@ export default class App extends Component {
           { action: "Go Fishing", done: false },
           { action: "Go Hunting", done: false },
           { action: "Go Camping", done: false }
-        ]
+        ],
+        showCompleted: true
       }
     )
   };
-
 
   render = () =>
     <div>
@@ -141,21 +141,30 @@ export default class App extends Component {
           {this.todoTableRows(false)}
         </tbody>
       </table>
-
-
-<table className="table table-stripes table-bordered">
-<thead>
-  <tr>
-    <th>Description</th>
-    <th>ReAdd Task</th>
-  </tr>
-</thead>
-<tbody>
-  {this.todoTableRows(true)}
-</tbody>
-</table>
-
-</div>
+     
+      <div className="bg-secondary text-white text-center p-2">
+          <VisibilityControl 
+          description = "Completed Tasks"
+          isChecked = {this.state.showCompleted}
+          callback = {checked => this.setState({
+            showCompleted: checked
+          })}
+          />
+      </div>
+{this.state.showCompleted && 
+      <table className="table table-stripes table-bordered">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>ReAdd Task</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.todoTableRows(true)}
+        </tbody>
+      </table>
+}
+    </div>
 };
 
 
