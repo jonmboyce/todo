@@ -141,7 +141,25 @@ export default class App extends Component {
           {this.todoTableRows(false)}
         </tbody>
       </table>
-    </div>
+
+
+<table className="table table-stripes table-bordered">
+<thead>
+  <tr>
+    <th>Description</th>
+    <th>ReAdd Task</th>
+  </tr>
+</thead>
+<tbody>
+  {this.todoTableRows(true)}
+</tbody>
+</table>
+
+</div>
 };
+
+
+
+
 
 // export default App;
