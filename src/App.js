@@ -4,8 +4,8 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';//added bootstrap
 //added below for the ToDoBanner.js reference
-import {ToDoBanner} from './ToDoBanner';
-import {ToDoRow} from './ToDoRow';
+import { ToDoBanner } from './ToDoBanner';
+import { ToDoRow } from './ToDoRow';
 // function App() {
 //   return (
 //     <div className="App">
@@ -27,7 +27,7 @@ import {ToDoRow} from './ToDoRow';
 //   );
 // }
 
-  //define the todo banner
+//define the todo banner
 
 
 export default class App extends Component {
@@ -54,42 +54,55 @@ export default class App extends Component {
 
   }//End ctor
 
-
-
-//Feature -3 todoTableRows Function
-//  If the ToDoRow Component's "done" property experiences a change event (checking the Done box in the UI) 
-//then the ToDoRow component calls a Callback method called toggleTodo (below) and passes toggleTodo the checked todo item
-todoTableRows = (isTaskDone) => this.state.todoItems.filter(x => x.done == isTaskDone).map( notCompleted => 
-  <ToDoRow 
-  key = {notCompleted.action}
-  item = {notCompleted}
-  />
-  )
-
-
-//using the lambda syntax the return keyword is not needed, when using Lambda sytax need a div
-render = () =>
-  <div>
-    {/*Features 1&2*/}
-    {/*this is a react "stub"*/}
-    <ToDoBanner
-      displayName={this.state.userName}
-      tasks={this.state.todoItems}
+  //Feature -3 todoTableRows Function
+  //  If the ToDoRow Component's "done" property experiences a change event (checking the Done box in the UI) 
+  //then the ToDoRow component calls a Callback method called toggleTodo (below) and passes toggleTodo the checked todo item
+  todoTableRows = (isTaskDone) => this.state.todoItems.filter(x => x.done == isTaskDone).map(notCompleted =>
+    <ToDoRow
+      key={notCompleted.action}
+      item={notCompleted}
+      callback={this.toggleTodo}//the callback will be invoked(executed, run) when everything is finished
     />
+  );
 
-{/* Feature - 3 */}
-<table className="table table-stripes table-bordered">
-  <thead>
-    <tr>
-      <th>Description</th>
-      <th>Done</th>
-    </tr>
-  </thead>
-  <tbody>
-    {this.todoTableRows(false)}
-  </tbody>
-</table>
-  </div>
+
+  //feature - 4 toggleToDo
+  //  The toggleTodo method is invoked as a callback when the ToDoRow component has a change event to the "done" property
+  //  .setState allows the data to be updated
+  //  When setState is invoked, React will make a new object with the changes.  Under the hood, React will compare the new object with the DOM version of the object.  If there is a difference between the 2 objects then the DOM will get re-drawn and we see the changes 
+  // the toggleTodo function is invoked as a callback from the <ToDoRow> component
+
+  toggleTodo = (todo) => this.setState(
+    {
+      todoItems: this.state.todoItems.map(
+        item => item.action === todo.action ? { ...item, done: !item.done } : item
+      )
+    }
+  );
+
+  //using the lambda syntax the return keyword is not needed, when using Lambda sytax need a div
+  render = () =>
+    <div>
+      {/*Features 1&2*/}
+      {/*this is a react "stub"*/}
+      <ToDoBanner
+        displayName={this.state.userName}
+        tasks={this.state.todoItems}
+      />
+
+      {/* Feature - 3 */}
+      <table className="table table-stripes table-bordered">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Done</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.todoTableRows(false)}
+        </tbody>
+      </table>
+    </div>
 };
 
 // export default App;
